@@ -23,6 +23,8 @@ def add_virtual_column(df: pd.DataFrame, role: str, new_column: str) -> pd.DataF
     """
 
     valid_col_pattern = r'^[A-Za-z_]+$'
+    allowed_ops = ['+', '-', '*']
+    
     if not all(re.match(valid_col_pattern, col) for col in df.columns):
         return pd.DataFrame([])
 
@@ -30,7 +32,6 @@ def add_virtual_column(df: pd.DataFrame, role: str, new_column: str) -> pd.DataF
         return pd.DataFrame([])
 
     role_cleaned = role.strip()
-    allowed_ops = ['+', '-', '*']
     tokens = re.split(r'\s*([+\-*])\s*', role_cleaned)
 
     for i, token in enumerate(tokens):
