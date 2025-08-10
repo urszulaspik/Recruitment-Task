@@ -33,12 +33,13 @@ def add_virtual_column(df: pd.DataFrame, role: str, new_column: str) -> pd.DataF
     allowed_ops = ['+', '-', '*']
     tokens = re.split(r'\s*([+\-*])\s*', role_cleaned)
 
-    if not all(t in allowed_ops or re.match(valid_col_pattern, t) for t in tokens):
-        return pd.DataFrame([])
-
-    for token in tokens:
-        if re.match(valid_col_pattern, token) and token not in df.columns:
-            return pd.DataFrame([])
+    for i, token in enumerate(tokens):
+        if i % 2 == 0:
+            if not re.match(valid_col_pattern, token) or token not in df.columns:
+                return pd.DataFrame([])
+        else:
+            if token not in allowed_ops:
+                return pd.DataFrame([])
 
     try:
         df_copy = df.copy()
